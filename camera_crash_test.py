@@ -58,12 +58,15 @@ def stress_test():
         process = subprocess.Popen(camera_launch_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
         # Wait for the camera to launch
+        first_n_lines_to_print = 5
         while True:
             line = process.stdout.readline().strip()
             if not line:  # Check for an empty line (EOF or process terminated)
                 time.sleep(1)
                 continue
-            # print(line)  # Print each line as it comes
+            if first_n_lines_to_print > 0:
+                print(line)
+                first_n_lines_to_print -= 1
             if camera_launched_identifier in line:
                 print(line)
                 print("_____ Camera launched successfully. _____")
