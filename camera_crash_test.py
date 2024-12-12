@@ -8,15 +8,22 @@ import argparse
 parser = argparse.ArgumentParser(description="Run camera crash test with specified launch command.")
 parser.add_argument('-p', '--python', action='store_true', help="Use the Python script to launch the camera.")
 parser.add_argument('-c', '--camera', action='store_true', help="Use the compiled camera binary to launch the camera.")
+parser.add_argument('-r', '--ros', action='store_true', help="Use the ROS camera node to launch the camera.")
 args = parser.parse_args()
 
 # Configuration
 if args.python:
     print("Using Python script to launch the camera.")
     camera_launch_cmd = ['python3', './camera.py']
+    FIRST_N_LINES_TO_PRINT = 5
 elif args.camera:
     print("Using compiled camera binary to launch the camera.")
     camera_launch_cmd = ['./build/camera']
+    FIRST_N_LINES_TO_PRINT = 5
+elif args.ros:
+    print("Using ROS camera node to launch the camera.")
+    camera_launch_cmd = ['ros2', 'launch', 'depthai_examples', 'stereo_inertial_node.launch.py', 'enableRviz:=false']
+    FIRST_N_LINES_TO_PRINT = 25
 else:
     raise ValueError("You must specify either -p or -c to choose the launch command.")
 
@@ -58,7 +65,7 @@ def stress_test():
         process = subprocess.Popen(camera_launch_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
         # Wait for the camera to launch
-        first_n_lines_to_print = 5
+        first_n_lines_to_print = FIRST_N_LINES_TO_PRINT
         while True:
             line = process.stdout.readline().strip()
             if not line:  # Check for an empty line (EOF or process terminated)
