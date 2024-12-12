@@ -1,3 +1,5 @@
+// stripped from https://github.com/luxonis/depthai-core/blob/main/examples/MonoCamera/mono_preview.cpp
+
 #include <iostream>
 
 // Includes common necessary includes for development using depthai library

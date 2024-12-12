@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import time
+
+# stripped from https://github.com/luxonis/depthai-python/blob/main/examples/Camera/camera_preview.py
+
 import depthai as dai
 
 with dai.Device() as device:
